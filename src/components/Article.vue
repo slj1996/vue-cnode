@@ -1,61 +1,68 @@
 <template>
   <div class="wrap">
-    <div class="content-replies">
-      <div class="content-top">
-        <div class="content-title">
-          <div class="title-header">
-            <div>
-              <span :class="[{title_top:(articleContent.top==true),title_good:(articleContent.good==true)}]">{{ articleContent | formatTopicType }}</span>
-              <span class="thisTitle">{{ articleContent.title }}</span>
-            </div>
-            <span class="intro">
-              发布于{{ articleContent.create_at | fromNow}}
-              •作者{{ authorName }}
-              •{{ articleContent.visit_count }}次浏览
-              •最后一次编辑是{{ articleContent.last_reply_at | fromNow }}
-              •来自 {{articleContent | formatFrom}}
-            </span>
-          </div>
-        </div>
-        <div class="content">
-          <div class="htmlContent" v-html="articleContent.content"></div>
-        </div>
-      </div>
-      <div class="replies">
-        <div class="replies-top">
-          <span class="replies-count">{{ articleContent.reply_count }} 回复</span>
-        </div>
-        <div class="replies-content">
-          <div class="reply-item" v-for="(item,idx) in replyLists" :key="idx">
-            <div class="replyer">
-              <img class="item-ava" :src="item.author['avatar_url']" alt="头像">
-              <span class="replyer-name">
-                {{ item.author.loginname }} <em>{{idx+1}}楼•{{item.create_at | fromNow}}</em>
+    <div v-if="isloading" class="loading">
+      <h1>loading...</h1>
+    </div>
+    <template v-else>
+      <div class="content-replies">
+        <div class="content-top">
+          <div class="content-title">
+            <div class="title-header">
+              <div>
+                <span :class="[{title_top:(articleContent.top==true),title_good:(articleContent.good==true)}]">
+                  {{ articleContent | formatTopicType }}
+                </span>
+                <span class="thisTitle">{{ articleContent.title }}</span>
+              </div>
+              <span class="intro">
+                发布于{{ articleContent.create_at | fromNow}}
+                •作者{{ authorName }}
+                •{{ articleContent.visit_count }}次浏览
+                •最后一次编辑是{{ articleContent.last_reply_at | fromNow }}
+                •来自 {{articleContent | formatFrom}}
               </span>
-              <span>{{ item.id == articleContent.author_id ? "作者" : "" }}</span>
             </div>
-            <div class="htmlContent" v-html="item.content"></div>
+          </div>
+          <div class="content">
+            <div class="htmlContent" v-html="articleContent.content"></div>
+          </div>
+        </div>
+        <div class="replies">
+          <div class="replies-top">
+            <span class="replies-count">{{ articleContent.reply_count }} 回复</span>
+          </div>
+          <div class="replies-content">
+            <div class="reply-item" v-for="(item,idx) in replyLists" :key="idx">
+              <div class="replyer">
+                <img class="item-ava" :src="item.author['avatar_url']" alt="头像">
+                <span class="replyer-name">
+                  {{ item.author.loginname }} <em>{{idx+1}}楼•{{item.create_at | fromNow}}</em>
+                </span>
+                <span>{{ item.id == articleContent.author_id ? "作者" : "" }}</span>
+              </div>
+              <div class="htmlContent" v-html="item.content"></div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="ava-box">
-      <div class="ava-box-header">
-        <span>作者</span>
-      </div>
-      <div class="ava-box-content">
-        <img :src="articleContent.author['avatar_url']" alt="头像" @click="getUserInfo">
-        <div>
-          <span class="sorce">积分：<em>{{ authorPoint }}</em></span>
+      <div class="ava-box">
+        <div class="ava-box-header">
+          <span>作者</span>
+        </div>
+        <div class="ava-box-content">
+          <img :src="articleContent.author['avatar_url']" alt="头像" @click="getUserInfo">
+          <div>
+            <span class="sorce">积分：<em>{{ authorPoint }}</em></span>
+          </div>
+        </div>
+        <div class="another">
+          <em>其他帖子：</em>
+          <div v-for="(it,idx) in authorContent" :key="idx" style="margin-top:5px;"> 
+            <span>{{ idx+1 }}. {{ it.title }}</span>
+          </div>
         </div>
       </div>
-      <div class="another">
-        <em>其他帖子：</em>
-        <div v-for="(it,idx) in authorContent" :key="idx" style="margin-top:5px;"> 
-          <span>{{ idx+1 }}. {{ it.title }}</span>
-        </div>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -65,6 +72,7 @@ export default {
   name:'Article',
   data(){
     return {
+      isloading:false,
       articleContent:{},
       replyLists:[],
       authorName:'',
@@ -86,11 +94,13 @@ export default {
     }
   },
   created(){
+    this.isloading = true
     this.$https.get(`api/v1/topic/${this.$route.params.id}`)
                 .then(res=>{
                   this.articleContent = res.data.data
                   this.replyLists = res.data.data.replies
                   this.authorName = res.data.data.author.loginname
+                  this.isloading = false
                 })
   },
   beforeUpdate(){
@@ -109,7 +119,7 @@ export default {
     display: flex;
   }
   .content-replies{
-    width: 68%;
+    width: 70%;
     
   }
   .wrap div{
@@ -194,7 +204,7 @@ export default {
   .ava-box{
     margin-left: 10px;
     height: 700px;
-    width: calc(32% - 30px);
+    width: calc(30% - 10px);
     background-color: #F6F6F6;
     img{
       width: 48px;

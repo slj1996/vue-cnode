@@ -3,11 +3,19 @@
     <div v-if="isloading" class="loading">
       <h1>loading...</h1>
     </div>
-    <div v-else class="topicsContent" v-for="(list,idx) in lists" :key="idx">
+    <div v-else class="topicsContent"
+     v-for="(list,idx) in lists" :key="idx">
       <div class="topics_title">
-        <a class="ava" href=""><img class="ava-img" :src="list.author.avatar_url" alt="头像"></a>
-        <span class="reply-count"><em>{{ list.reply_count }}</em>/{{ list.visit_count }}</span>
-        <span class="topicTag" :class="[{top:(list.top==true),good:(list.good==true)}]">{{list | formatTopicType}}</span>
+        <a class="ava" href="">
+          <img class="ava-img" :src="list.author.avatar_url" alt="头像">
+        </a>
+        <span class="reply-count">
+          <em>{{ list.reply_count }}</em>/{{ list.visit_count }}
+        </span>
+        <span class="topicTag"
+         :class="[{top:(list.top==true),good:(list.good==true)}]">
+         {{list | formatTopicType}}
+        </span>
         <router-link :to="{name:'topicContent',params:{id:list.id}}" >
           <span class="title">{{ list.title }}</span>
         </router-link>
@@ -24,8 +32,8 @@
             @click="getTopicsPage">{{ it }}</span>
       <span class="pageTag">...</span>
       <span class="lastTag" @click="getNextTopicsPage">&gt;&gt;</span>
-      <input class="input" type="text">
-      <button @click="setPage">跳转</button>
+      <input class="input" type="text" @keyup.enter="finishEnter">
+      <button @click="goToPage">跳转</button>
     </div>
   </div>
 </template>
@@ -83,18 +91,19 @@ export default {
       } else if (e.target.textContent == "全部"){
         this.tab = ""
         this.getData()
+      } else if (e.target.textContent == "测试"){
+        this.tab = "dev"
+        this.getData()
       }
     },
     getNextTopicsPage(){
       this.states.page += 1 
       this.getData()
-      
     },
     getPreTopicsPage(){
       if(this.states.page>1){
         this.states.page -= 1 
         this.getData()
-        
       }
     },
     getData() {
@@ -112,23 +121,14 @@ export default {
         })
         .catch(err => console.log(err))
     },
-    setPage(e){
+    finishEnter(e){
+      e.target.nextElementSibling.click()
+    },
+    goToPage(e){
       let val = e.target.previousElementSibling.value
       this.states.page = val
       this.getData()
       e.target.previousElementSibling.value = ''
-      if(this.states.page!=val){
-      this.states.page = val
-      this.getData()
-      if(val>3){
-        let num = val - this.pageList[2]
-        this.pageList = this.pageList.map(it => it+num)
-      }
-      if(val<4 && this.pageList[2]!=3){
-        this.pageList=[1,2,3,4,5]
-      }
-      
-    }
     }
   },
   created(){

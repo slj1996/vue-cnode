@@ -2,19 +2,19 @@
   <main>
     <div id="topicsList">
       <div id="topicsHeader">
-        <router-link  class="headerTag" v-for="(item,idx) in headerTag" :key="idx" :to="{name:'list',params:{id:item.className}}">
+        <router-link  class="headerTag"
+         v-for="(item,idx) in headerTag" :key="idx"
+          :to="{name:'list',params:{id:item.className}}">
           {{item.text}}</router-link>
       </div>
       <router-view :key="$route.fullPath"></router-view>
     </div>
-
   </main>
 </template>
 
 <script>
 
 export default {
-  props:['val'],
   name:'mainList',
   data(){
     return {
@@ -33,9 +33,11 @@ export default {
       },{
         text:'招聘',
         className: 'job'
+      },{
+        text:'测试',
+        className: 'dev'
       }],
     }
-    
   },
 }
 </script>
@@ -47,8 +49,6 @@ export default {
     min-width: 960px;
     margin: 10px auto;
   }
-  
-  
   #topicsList{
     width: 100%;
     #topicsHeader{
@@ -122,7 +122,6 @@ export default {
   }
   .ava{
     font-size: 0;
-
   }
   .ava-img{
     width: 30px;

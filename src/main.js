@@ -38,6 +38,10 @@ Vue.filter('formatTopicType', function (list) {
     return '问答'
   } else if (list.tab == 'share') {
     return '分享'
+  } else if (list.tab == 'job') {
+    return '招聘'
+  } else if (list.tab == 'dev') {
+    return '测试'
   }
 })
 
