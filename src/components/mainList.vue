@@ -16,6 +16,10 @@
 
 export default {
   name:'mainList',
+  mounted() {
+    // TODO:
+    console.log(this.$store)
+  },
   data(){
     return {
       headerTag:[{
