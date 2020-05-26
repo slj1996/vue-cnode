@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import { store } from './store'
 import axios from 'axios'
 import moment from 'moment'
 import NProgress from 'nprogress'
@@ -29,22 +29,40 @@ Vue.filter('fromNow', date => {
 	return moment(date).fromNow();
 });
 
-Vue.filter('formatTopicType', function (list) {
-  if (list.good == true) {
-    return '精华'
-  } else if (list.top == true) {
-    return '置顶'
-  } else if (list.tab == 'ask') {
-    return '问答'
-  } else if (list.tab == 'share') {
-    return '分享'
-  } else if (list.tab == 'job') {
-    return '招聘'
-  } else if (list.tab == 'dev') {
-    return '测试'
-  }
-})
 
+// eslint-disable-next-line
+const topicsMap = {
+  // TODO:
+  good: "精华",
+  ask: "问答",
+  share: "分享",
+  job: "招聘",
+  dev: "测试",
+  top: "置顶",
+};
+
+Vue.filter("formatTopicType", function(list) {
+  if (list.good || list.top) {
+    return list.good ? topicsMap.good : topicsMap.top;
+  }
+  return topicsMap[list.tab];
+
+  // if (list.good == true) {
+  //   return "精华";
+  // } else if (list.top == true) {
+  //   return "置顶";
+  // } else if (list.tab == "ask") {
+  //   return "问答";
+  // } else if (list.tab == "share") {
+  //   return "分享";
+  // } else if (list.tab == "job") {
+  //   return "招聘";
+  // } else if (list.tab == "dev") {
+  //   return "测试";
+  // }
+});
+
+// TODO:
 Vue.filter('formatFrom', function (list) {
   if (list.tab == 'ask') {
     return '问答'
