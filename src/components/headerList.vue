@@ -58,4 +58,7 @@ export default {
       margin-right: 5px;
     }
   }
+  .header-box-right a{
+    color: #CCCCCC;
+  }
 </style>
