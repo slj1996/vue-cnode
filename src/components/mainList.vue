@@ -8,7 +8,7 @@
           {{item.text}}</router-link>
       </div>
       <router-view :key="$route.fullPath"></router-view>
-    </div>
+    </div>   
   </main>
 </template>
 

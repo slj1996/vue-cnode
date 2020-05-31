@@ -24,28 +24,18 @@
         <span>{{ list.last_reply_at | fromNow }}</span>
       </div>
     </div>
-    <div class="topicsFooter" :now="page">
-      <span class="firstTag" @click="getPreTopicsPage">&lt;&lt;</span>
-      <span class="pageTag" v-if="page>3">...</span>
-      <span
-        v-for="(it,idx) in pageList"
-        :key="idx+1"
-        class="pageTag"
-        @click="getTopicsPage"
-      >{{ it }}</span>
-      <span class="pageTag">...</span>
-      <span class="lastTag" @click="getNextTopicsPage">&gt;&gt;</span>
-      <input class="input" type="text" @keyup.enter="finishEnter" />
-      <button @click="goToPage">跳转</button>
-    </div>
+    <el-pagination layout="prev, pager, next" :total="1000"></el-pagination>
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
+import { Pagination } from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 
 export default {
   name: "topicsLists",
+  components:{'el-pagination':Pagination},
   computed: mapState(["lists", "pageList", "count", "page", "isloading"]),
   methods: {
     getTopicsPage(e) {
