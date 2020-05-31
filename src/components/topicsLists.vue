@@ -24,7 +24,14 @@
         <span>{{ list.last_reply_at | fromNow }}</span>
       </div>
     </div>
-    <el-pagination layout="prev, pager, next" :total="1000"></el-pagination>
+    <el-pagination
+      background
+      layout="prev, pager, next"
+      :total="1000"
+      @prev-click="getTopicsPage"
+      @current-change="getTopicsPage"
+      @next-click="getTopicsPage">
+    </el-pagination>
   </div>
 </template>
 
@@ -38,18 +45,10 @@ export default {
   components:{'el-pagination':Pagination},
   computed: mapState(["lists", "pageList", "count", "page", "isloading"]),
   methods: {
-    getTopicsPage(e) {
-      this.$store.commit("setTopicsPage", e.target.textContent);
+    getTopicsPage(val) {
+      this.$store.commit("setTopicsPage", val);
       this.getData();
       window.scrollTo(0, 0);
-    },
-    getNextTopicsPage() {
-      this.$store.commit("setNextTopicsPage");
-      this.getData();
-    },
-    getPreTopicsPage() {
-      this.$store.commit("setPreTopicsPage");
-      this.getData();
     },
     getData() {
       this.$store.dispatch("getData", this.$route.params.id);

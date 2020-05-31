@@ -46,27 +46,12 @@ export const store = new Vuex.Store({
     setPage(state, page) {
       state.page = page
     },
-    setNextTopicsPage(state) {
-      state.page += 1
-    },
-    setPreTopicsPage(state) {
-      if (state.page > 1) {
-        state.page -= 1
-      }
-    },
     setData(state, res) {
       state.lists = res.data.data
     },
     setTopicsPage(state, content) {
       if (state.page != content) {
         state.page = content
-        if (content > 3) {
-          let num = content - state.pageList[2]
-          state.pageList = state.pageList.map(it => it + num)
-        }
-        if (content < 4 && state.pageList[2] != 3) {
-          state.pageList = [1, 2, 3, 4, 5]
-        }
       }
     },
     setUserInfo(state, res) {
