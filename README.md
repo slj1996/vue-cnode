@@ -1,4 +1,4 @@
-# vue-cnode
+# vue-cnode![CI](https://github.com/slj1996/vue-cnode/workflows/CI/badge.svg)
 
 ## Project setup
 ```
