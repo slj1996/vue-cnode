@@ -14,9 +14,10 @@ on:
 jobs:
   # This workflow contains a single job called "build"
   build:
+    if: "!contains(github.event.head_commit.message, '[ci skip]')"  
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -61,3 +62,5 @@ jobs:
         # commit_message: # optional
         # Write the given domain name to the CNAME file
         # fqdn: # optional
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
